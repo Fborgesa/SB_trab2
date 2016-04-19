@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1461025217 source:d:\gitstuf\sb_trab2\src\crc32.c
+	<stdio.h>
+
+1461027384 source:d:\gitstuf\sb_trab2\src\main.c
+	"..\include\md5.h"
+	<stdio.h>
+	<string.h>
+
+1461027042 d:\gitstuf\sb_trab2\include\md5.h
+	<stdio.h>
+
+1461027073 source:d:\gitstuf\sb_trab2\src\md5.c
+	"..\include\md5.h"
+
