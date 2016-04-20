@@ -30,3 +30,11 @@
 
 # Debug files
 *.dSYM/
+
+# Code Blocks
+*.cbp
+*.depend
+*.layout
+
+# Codigo compilado
+crc
