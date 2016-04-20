@@ -1,15 +1,26 @@
 # depslib dependency file v1.0
-1461025217 source:d:\gitstuf\sb_trab2\src\crc32.c
-	<stdio.h>
+1461155798 source:d:\gitstuf\sb_trab2\src\crc32.c
+	"../include/CRC32.h"
 
 1461027384 source:d:\gitstuf\sb_trab2\src\main.c
 	"..\include\md5.h"
 	<stdio.h>
 	<string.h>
 
-1461027042 d:\gitstuf\sb_trab2\include\md5.h
+1461159111 d:\gitstuf\sb_trab2\include\md5.h
 	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdint.h>
 
-1461027073 source:d:\gitstuf\sb_trab2\src\md5.c
+1461164661 source:d:\gitstuf\sb_trab2\src\md5.c
 	"..\include\md5.h"
+
+1461155798 d:\gitstuf\sb_trab2\include\crc32.h
+	<stdio.h>
+	<stdint.h>
+	<stdlib.h>
+
+1461159181 source:d:\gitstuf\sb_trab2\src\mainhash.c
+	"../include/md5.h"
 

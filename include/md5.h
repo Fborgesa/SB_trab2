@@ -2,6 +2,9 @@
 #define MD5_h
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
 
-void encode_md5(char *in, char *out);
+void md5(const uint8_t *msg_inicial, uint8_t *md5_msg);
 #endif /* CRC32_h */
