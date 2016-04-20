@@ -32,9 +32,9 @@
 *.dSYM/
 
 # Code Blocks
-*.cbp
-*.depend
-*.layout
+# *.cbp
+# *.depend
+# *.layout
 
 # Codigo compilado
 crc
