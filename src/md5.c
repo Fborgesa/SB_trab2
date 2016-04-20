@@ -45,7 +45,12 @@ uint32_t to_int32(const uint8_t *bytes)
         | ((uint32_t) bytes[3] << 24);
 }
 
-// o vetor de sa�da deve ter tamanho 2
+#define F(X,Y,Z) (((X) & (Y)) | (~(X) & (Z)))
+#define G(X,Y,Z) (((X) & (Z)) | ((Y) & ~(Z)))
+#define H(X,Y,Z) ((X) ^ (Y) ^ (Z))
+#define I(X,Y,Z) ((Y) ^ ((X) | ~(Z)))
+
+// o vetor de saída deve ter tamanho 2
 // In this document a "word" is a 32-bit quantity and a "byte" is an
 // eight-bit quantity.
 void toword_array(const size_t val, uint32_t *saida){
@@ -55,10 +60,14 @@ void toword_array(const size_t val, uint32_t *saida){
 
 void md5(const uint8_t *msg_inicial, uint8_t *md5_msg)
 {
+    //as variáveis que vão conter a mensagem
+    uint32_t aa, bb, cc, dd;
+
     long long msglen;
-    int i;
+    int i, offset;
     size_t inicial_len;
-    uint32_t lenword[2];
+    uint32_t lenword[2], w[16];
+    uint32_t a, b, c, d, f, g, temp;
     uint8_t *msg = NULL;
 
     inicial_len = strlen(msg_inicial);
@@ -77,8 +86,65 @@ void md5(const uint8_t *msg_inicial, uint8_t *md5_msg)
     to_bytes(inicial_len<<3, msg + msglen);
     to_bytes(inicial_len>>29, msg + msglen + 4);
 
+    printf("Len da msg: %d\n\n", msglen+8);
 
+    //4 buffers de 32 bits são inicializados para computar o hash
+    aa = 0x67452301;
+    bb = 0xefcdab89;
+    cc = 0x98badcfe;
+    dd = 0x10325476;
 
-    return msg;
+    // processar a mensagem em chunks de 64 bytes (512 bits)
+    for(offset=0; offset<msglen; offset += 64) {
+
+        // break chunk into sixteen 32-bit words w[j], 0 ≤ j ≤ 15
+        for (i = 0; i < 16; i++)
+            w[i] = to_int32(msg + offset + i*4);
+
+        // Initialize hash value for this chunk:
+        a = aa;
+        b = bb;
+        c = cc;
+        d = dd;
+
+        // Main loop:
+        for(i = 0; i<64; i++) {
+
+            if (i < 16) {
+                f = F(b,c,d);
+                g = i;
+            } else if (i < 32) {
+                f = G(b,c,d);
+                g = (5*i + 1) % 16;
+            } else if (i < 48) {
+                f = H(b,c,d);
+                g = (3*i + 5) % 16;
+            } else {
+                f = I(b,c,d);
+                g = (7*i) % 16;
+            }
+
+            temp = d;
+            d = c;
+            c = b;
+            b = b + LEFTROTATE((a + f + k[i] + w[g]), r[i]);
+            a = temp;
+
+        }
+
+        // Add this chunk's hash to result so far:
+        aa += a;
+        bb += b;
+        cc += c;
+        dd += d;
+
+    }
+    free(msg);
+
+    to_bytes(aa, md5_msg);
+    to_bytes(bb, md5_msg + 4);
+    to_bytes(cc, md5_msg + 8);
+    to_bytes(dd, md5_msg + 12);
+
 
 }

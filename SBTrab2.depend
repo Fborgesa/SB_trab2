@@ -24,3 +24,23 @@
 1461159181 source:d:\gitstuf\sb_trab2\src\mainhash.c
 	"../include/md5.h"
 
+1461183337 source:d:\mygit\sb_trab2\src\crc32.c
+	"../include/CRC32.h"
+
+1461183337 d:\mygit\sb_trab2\include\crc32.h
+	<stdio.h>
+	<stdint.h>
+	<stdlib.h>
+
+1461183337 source:d:\mygit\sb_trab2\src\mainhash.c
+	"../include/md5.h"
+
+1461183337 d:\mygit\sb_trab2\include\md5.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdint.h>
+
+1461186932 source:d:\mygit\sb_trab2\src\md5.c
+	"..\include\md5.h"
+
