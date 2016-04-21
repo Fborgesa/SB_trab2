@@ -1,5 +1,8 @@
-#include "..\include\md5.h"
-
+#if _WIN32
+    #include "..\include\md5.h"
+#else
+    #include "../include/md5.h"
+#endif
 
 // Constants are the integer part of the sines of integers (in radians) * 2^32.
 const uint32_t k[64] = {
@@ -58,19 +61,17 @@ void toword_array(const size_t val, uint32_t *saida){
     saida[1] = (uint32_t) (val >> 32);
 }
 
-void md5(const uint8_t *msg_inicial, uint8_t *md5_msg)
+void md5(const uint8_t *msg_inicial, long long inicial_len, uint8_t *md5_msg)
 {
     //as variáveis que vão conter a mensagem
     uint32_t aa, bb, cc, dd;
 
     long long msglen;
     int i, offset;
-    size_t inicial_len;
     uint32_t lenword[2], w[16];
     uint32_t a, b, c, d, f, g, temp;
     uint8_t *msg = NULL;
 
-    inicial_len = strlen(msg_inicial);
     //msglen is len (in bits) at the beginning, and at the end will be congruent to 448 mod 512
     for(msglen = (inicial_len + 1) * 8; msglen % 512 < 448; msglen++);
 
@@ -86,7 +87,6 @@ void md5(const uint8_t *msg_inicial, uint8_t *md5_msg)
     to_bytes(inicial_len<<3, msg + msglen);
     to_bytes(inicial_len>>29, msg + msglen + 4);
 
-    printf("Len da msg: %d\n\n", msglen+8);
 
     //4 buffers de 32 bits são inicializados para computar o hash
     aa = 0x67452301;
