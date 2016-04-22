@@ -1,0 +1,8 @@
+Dentre os arquivos de teste, alguns foram propositalmente danificados,
+e serão capazes de identificá-los através de seus hashes.
+
+Além destes, poderão identificar erros de 'transmissão' propositais 
+de arquivos, ao checar o CRC deles. 
+
+Liste todas as colisões, que arquivos foram danificados e eventuais
+hashes e CRCs que não batam com os especificados.

@@ -1,0 +1,23 @@
+58176 amostra_h1.bin
+9887  amostra_h2.bin
+
+33696 amostra_h3_win.exe
+
+33257 amostra_h4_win.exe
+
+27324 amostra_h5_lin
+
+54962 amostra_h6_lin
+
+32647 amostra_h7.ps
+
+14982 amostra_h8.ps
+
+14090 amostra_h9.jpg
+41367 amostra_h10.jpg
+
+12499 amostra_h11.jpg
+
+8842  amostra_h12.bmp
+
+36486 amostra_h13.bmp
