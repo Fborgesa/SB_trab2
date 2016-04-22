@@ -4,14 +4,14 @@ INCLUDE=./include
 SOURCE=./src
 OBJ = ./obj
 
-all: 
+all:
 	@echo "Usage: make CRC or make md5"
 
 CRC: CRC32.o mainCRC.o moveobj
 	$(CC) $(CFLAGS) -o crc $(OBJ)/mainCRC.o $(OBJ)/CRC32.o
 
-md5: mainMd5.o md5.o moveobj 
-	$(CC) $(CFLAGS) -o mainMd5 $(OBJ)/md5.o $(OBJ)/mainMd5.o 
+md5: mainMd5.o md5.o moveobj
+	$(CC) $(CFLAGS) -o mainMd5 $(OBJ)/md5.o $(OBJ)/mainMd5.o
 
 md5.o: $(SOURCE)/md5.c $(INCLUDE)/md5.h
 	$(CC) $(CFLAGS) $(SOURCE)/md5.c -c

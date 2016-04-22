@@ -41,3 +41,7 @@ crc
 
 # Mac
 .DS_Store
+
+# Arquivos de saída do CRC32
+crc_check.txt
+teste.txt

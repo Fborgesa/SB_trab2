@@ -43,52 +43,52 @@ main { -e | -d | -h} { -b62 | -b64 | -b85 | -b91 } {arquivo de entrada} {arquivo
 //void conversor(char opt1, char opt2, char *a_entrada, char *a_saida){
 int main(int argc, char **argv) {
     int opt1 = 0, opt2 = 0, crc32 = 0;
-    
+
     opt1 = OPT1(argc, argv);
     opt2 = OPT2(argc, argv);
-    
+
     switch (opt1) {
         // Ajuda.
         case 'h':
             printf("%s", help);
             break;
-            
+
         // CRC32.
         case '3':
             switch (opt2) {
                 // Gerar.
                 case 'g':
-                    crc32 = generate_crc32(argv[3]);
+                    crc32 = generate_crc32(argv[3], argv[4]);
                     printf("\n%x\n\n", crc32);
                     break;
-                    
+
                 // Checar.
                 case 'c':
+                    check_crc32(argv[3], argv[4]);
                     break;
-                    
                 default:
                     printf("%s", error[1]);
                     break;
             }
             break;
-            
+
         // CRC16.
         case '1':
             switch (opt2) {
                 // Gerar.
                 case '3':
                     break;
-                    
+
                 // Checar.
                 case '1':
                     break;
-                    
+
                 default:
                     printf("%s", error[1]);
                     break;
             }
             break;
-            
+
         default:
             printf("%s", error[0]);
             break;
