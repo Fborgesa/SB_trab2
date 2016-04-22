@@ -145,6 +145,7 @@ int32_t check_crc32(char *fname_in_file, char *fname_in_crc) {
         return 1;
     }
 
+    printf("\nArquivo corrompido.\n\n");
     return 0;
 }
 
@@ -155,7 +156,7 @@ uint8_t reflect(uint8_t b) {
     return b;
 }
 
-unsigned reflect32(unsigned x) {
+uint32_t reflect32(uint32_t x) {
     x = ((x & 0x55555555) <<  1) | ((x >>  1) & 0x55555555);
     x = ((x & 0x33333333) <<  2) | ((x >>  2) & 0x33333333);
     x = ((x & 0x0F0F0F0F) <<  4) | ((x >>  4) & 0x0F0F0F0F);
