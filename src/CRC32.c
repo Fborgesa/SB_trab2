@@ -160,7 +160,7 @@ int32_t check_crc32(char *fname_in_file, char *fname_in_crc) {
 
     printf("\nCRC recebido: %x\n", crcReceived);
     printf("\nCRC gerado: %x\n", crcGenerated);
-    
+
     if (crcReceived == crcGenerated) {
         printf("\nArquivo integro.\n\n");
         return 1;
@@ -171,17 +171,17 @@ int32_t check_crc32(char *fname_in_file, char *fname_in_crc) {
 }
 
 uint8_t reflect(uint8_t b) {
-    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
     b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
     return b;
 }
 
 uint32_t reflect32(uint32_t x) {
-    x = ((x & 0x55555555) <<  1) | ((x >>  1) & 0x55555555);
-    x = ((x & 0x33333333) <<  2) | ((x >>  2) & 0x33333333);
-    x = ((x & 0x0F0F0F0F) <<  4) | ((x >>  4) & 0x0F0F0F0F);
-    x = (x << 24) | ((x & 0xFF00) << 8) |
-    ((x >> 8) & 0xFF00) | (x >> 24);
+    x = ((x & 0xAAAAAAAA) >> 1) | ((x & 0x55555555) << 1);
+    x = ((x & 0xCCCCCCCC) >> 2) | ((x & 0x33333333) << 2);
+    x = ((x & 0xF0F0F0F0) >> 4) | ((x & 0x0F0F0F0F) << 4);
+    x = ((x & 0xFF00FF00) >> 8) | ((x & 0x00FF00FF) << 8);
+    x = ((x & 0xFFFF0000) >> 16) | ((x & 0x0000FFFF) << 16);
     return x;
 }
