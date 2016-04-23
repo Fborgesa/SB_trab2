@@ -51,7 +51,7 @@ int main(int argc, char **argv){
     // display result
     for (i = 0; i < 16; i++)
         printf("%2.2x", result[i]);
-
+    printf(" - %s", ar);
     printf("\n");
     return 0;
 
