@@ -45,7 +45,7 @@ int main(int argc, char **argv){
         rewind(arq);
         msg = (char*)(malloc(filelen));
         fread(msg, 1, filelen, arq);
-        printf("%s\n", ar, filelen);
+        //printf("%s\n", ar, filelen);
         md5((uint8_t*) msg, filelen, result);
     }
     // display result
