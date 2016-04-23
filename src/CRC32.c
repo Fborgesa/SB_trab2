@@ -1,4 +1,20 @@
-#include "../include/CRC32.h"
+/*
+ *  Universidade de Brasília
+ *  Instituto de Ciencias Exatas
+ *  Departamento de Ciência da Computação
+ *
+ *  Software Básico - Turma A - 1/2016
+ *
+ *  Hashs e CRCs
+ *
+ *  Grupo 3:
+ *      - Carlos Joel Tavares da Silva  13/0007293
+ *      - Felipe Barreto Fernandes      09/0112831
+ *      - Felipe Borges Albuquerque     09/93972
+ *      - Géssica Neves Sodré da Silva  11/0146115
+ *      - Pedro da Costa Abreu Júnior   11/0018800
+ *
+ */
 
 // Especificações do CRC gerado:
 
@@ -14,6 +30,8 @@
 // Qual implementação utilizar? DIRECT_TABLE_ALGORITHM ou TABLE_ALGORITHM
 // O TABLE ALGORITHM PARECE NAO FUNCIONAR!!!
 #define DIRECT_TABLE_ALGORITHM
+
+#include "../include/CRC32.h"
 
 // Tabela com todos os XOR`s de 0x04c11db7 pré-calculados.
 static const unsigned int crc_table[256] = {
@@ -140,6 +158,9 @@ int32_t check_crc32(char *fname_in_file, char *fname_in_crc) {
 
     crcGenerated = generate_crc32(fname_in_file, "crc_check.txt");
 
+    printf("\nCRC recebido: %x\n", crcReceived);
+    printf("\nCRC gerado: %x\n", crcGenerated);
+    
     if (crcReceived == crcGenerated) {
         printf("\nArquivo integro.\n\n");
         return 1;
