@@ -40,7 +40,7 @@ void sha1_init(sha1_info *context){
 }
 
 int generate_sha1(sha1_info *context, char *fname, uint8_t sha1_hash[HASH_SIZE]){
-        FILE *fp_in = NULL;
+        FILE *fp_in = NULL; // Ponteiro para o arquivo de entrada
         int i; // Contador do loop que percorre o buffer
         char b = '\0';
 
@@ -88,7 +88,7 @@ void sha1_message_pad(sha1_info *context){
          */
 
         // Acrescenta 1 seguido de quinze 0 representado pelo hexadecimal 0x80
-        context->msg_block[context->msg_block_index++] = MASK1;
+        context->msg_block[context->msg_block_index++] = MASK;
 
         /*
          * Se a mensagem original for maior que 55bytes, cria-se outro bloco

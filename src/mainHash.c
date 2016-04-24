@@ -14,6 +14,7 @@
  *      - Géssica Neves Sodré da Silva  11/0146115
  *      - Pedro da Costa Abreu Júnior   11/0018800
  *
+ *  Arquivo fonte principal para geração de hash "mainHash.c"
  */
 
 #include <string.h>
@@ -94,66 +95,66 @@ void param_cmd_line(int argc, char **argv) {
     }
 }
 
-// void ask_param() {
-//     char op1 = '\0', op2 = '\0', name_arq1[100] = {0}, name_arq2[100] = {0};
-//     int crc32 = 0;
-//
-//     do {
-//         printf("Digite o CRC a ser usado.\n");
-//         printf("0 - Sair.\n");
-//         printf("1 - CRC16.\n");
-//         printf("2 - CRC32.\n");
-//         op1 = getchar();
-//         if (op1 == '0')
-//             exit(0);
-//     } while (op1 != '1' && op1 != '2');
-//
-//     do {
-//         printf("Digite se deseja gerar o CRC ou checar a integridade de um arquivo.\n");
-//         printf("0 - Sair.\n");
-//         printf("1 - Gerar CRC.\n");
-//         printf("2 - Checar a integridade de um arquivo.\n");
-//         op2 = getchar();
-//         if (op2 == '0')
-//             exit(0);
-//     } while (op2 != '1' && op2 != '2');
-//
-//     if (op2 == '1')
-//         printf("Digite o nome do arquivo que terá seu CRC calculado:\n");
-//     else if (op2 == '2')
-//         printf("Digite o nome do arquivo que terá sua integridade checada:\n");
-//     scanf("%s", name_arq1);
-//
-//     if (op2 == '1') {
-//         printf("Digite o nome do arquivo de saída, onde o valor do CRC gerado\n");
-//         printf("será salvo:\n");
-//     }
-//     if (op2 == '2') {
-//         printf("Digite o nome do arquivo que possui o valor do CRC correspondente\n");
-//         printf("ao arquivo de entrada.\n");
-//     }
-//     scanf("%s", name_arq2);
-//
-//     // Gerar CRC16.
-//     if (op1 == '1' && op2 == '1') {}
-//
-//     // Checar integridade de um arquivo com CRC16.
-//     else if (op1 == '1' && op2 == '2') {}
-//
-//     // Gerar CRC32.
-//     else if (op1 == '2' && op2 == '1') {
-//         crc32 = generate_crc32(name_arq1, name_arq2);
-//         printf("\n%x\n\n", crc32);
-//     }
-//
-//     // Checar integridade de um arquivo com CRC32.
-//     else if (op1 == '2' && op2 == '2')
-//         check_crc32(name_arq1, name_arq2);
-// }
+void ask_param() {
+    sha1_info sha; // contexto sha-1
+    uint8_t sha1_hash[HASH_SIZE], md5_hash[16];
+    char *aux = NULL;
+    int err = 0;
+    char op1 = '\0', name_arq1[100] = {0}, name_arq2[100] = {0};
+
+    do {
+        printf("Digite o CRC a ser usado.\n");
+        printf("0 - Sair.\n");
+        printf("1 - SHA1.\n");
+        printf("2 - MD5.\n");
+        op1 = getchar();
+        if (op1 == '0')
+            exit(0);
+    } while (op1 != '1' && op1 != '2');
+
+
+    printf("Digite o nome do arquivo que terá seu hash calculado:\n");
+    scanf("%s", name_arq1);
+
+    printf("Digite o nome do arquivo de saída, onde o valor do hash gerado\n");
+    printf("será salvo:\n");
+    scanf("%s", name_arq2);
+
+    switch (op1) {
+        // SHA-1
+        case '1':
+            sha1_init(&sha);
+            err = generate_sha1(&sha, name_arq1, sha1_hash);
+            if (err){
+                fprintf(stderr, "generate_sha1 Error %d.\n", err);
+            }else{
+                print_sha1_to_cmd(sha1_hash);
+                print_sha1_to_file(sha1_hash, name_arq2);
+            }
+            break;
+
+        // MD5
+        case '2':
+            err = call_md5(name_arq1, md5_hash);
+            if (err){
+                fprintf(stderr, "call_md5 Error %d.\n", err );
+            }else{
+                print_md5_to_cmd(md5_hash);
+                print_md5_to_file(md5_hash, name_arq2);
+            }
+            break;
+
+        default:
+            printf("%s", error[0]);
+            break;
+    }
+}
 
 int main(int argc, char **argv) {
-    if (argc == 1) {}
-        //ask_param();
-    else
+    if (argc == 1) {
+        ask_param();
+    }
+    else{
         param_cmd_line(argc, argv);
+    }
 }

@@ -65,8 +65,7 @@ enum{
 #define H4  0xc3d2e1f0;
 
 /* definição das máscaras para operações binárias */
-#define MASK1       0x80
-#define MASK_LEAST  0xFF
+#define MASK       0x80
 
 
 /*
@@ -104,8 +103,7 @@ void sha1_init(sha1_info *context);
   * Parâmetros  :
   *             sha1_info *context: contexto que armazenará todas as informações
   *                                  relativas ao bloco de mensagem sendo processado
-  *             const uint8_t *original_message: ponteiro para a mensagem original
-  *             uint32_t length: tamanho da mensagem original
+  *             char *fname: nome do arquivo de onde o hash será gerado
   *             uint8_t sha1_hash[HASH_SIZE]: array que suporta o resultado o hash sha-1
   * Retorno     : código de erro
   */
@@ -160,6 +158,16 @@ uint32_t shar1_circular_shift(uint32_t word, uint8_t n);
   */
 void print_sha1_to_cmd(uint8_t* sha1_hash);
 
+ /*
+  * Brief       : Escreve o hash em arquivo
+  *
+  * Descrição   : Escreve o hash em arquivo, mostrando cada um dos elementos do array
+  *               separado por espaço
+  * Parâmetros  :
+  *             uint8_t* sha1_hash: hash a ser impresso
+  *             char *fname: arquivo onde o hash será impresso
+  * Retorno     : Nenhum
+  */
 void print_sha1_to_file(uint8_t* sha1_hash, char *fname);
 
 #endif
