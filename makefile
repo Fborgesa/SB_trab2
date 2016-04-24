@@ -7,8 +7,8 @@ OBJ = ./obj
 all:
 	@echo "Usage: make CRC or make md5 or make sha1"
 
-CRC: CRC32.o mainCRC.o moveobj
-	$(CC) $(CFLAGS) -o crc $(OBJ)/mainCRC.o $(OBJ)/CRC32.o
+CRC: CRC32.o CRC16.o mainCRC.o moveobj
+	$(CC) $(CFLAGS) -o crc $(OBJ)/mainCRC.o $(OBJ)/CRC32.o $(OBJ)/CRC16.o
 
 md5: mainMd5.o md5.o moveobj
 	$(CC) $(CFLAGS) -o mainMd5 $(OBJ)/md5.o $(OBJ)/mainMd5.o
@@ -27,6 +27,9 @@ mainCRC.o: $(SOURCE)/mainCRC.c $(INCLUDE)/CRC32.h
 
 CRC32.o: $(SOURCE)/CRC32.c $(INCLUDE)/CRC32.h
 	$(CC) $(CFLAGS) $(SOURCE)/CRC32.c -c
+
+CRC16.o: $(SOURCE)/CRC16.c $(INCLUDE)/CRC16.h
+	$(CC) $(CFLAGS) $(SOURCE)/CRC16.c -c
 
 sha1.o: $(SOURCE)/sha1.c $(INCLUDE)/sha1.h
 	$(CC) $(CFLAGS) $(SOURCE)/sha1.c -c

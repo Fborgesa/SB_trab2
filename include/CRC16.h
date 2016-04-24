@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-int generateCRC16(char* fname);
-int checkCRC16(int checkCRC, char* fname);
+int generateCRC16(char* in, char* out);
+int checkCRC16(char* in, char* checkCRC);
 
 #endif /* CRC16_h */

@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include "../include/CRC32.h"
+#include "../include/CRC16.h"
 
 #define OPT1(ac, av) (ac > 1 ? av[1][0] == '-' ? av[1] : "\0" : "\0")
 
@@ -90,11 +91,14 @@ void param_cmd_line(int argc, char **argv) {
         case '1':
             switch (opt2) {
                 // Gerar.
-                case '3':
+                case 'g':
+                    crc32 = generateCRC16(argv[3], argv[4]);
+                    printf("\n%x\n\n", crc32);
                     break;
 
                 // Checar.
-                case '1':
+                case 'c':
+                    checkCRC16(argv[3], argv[4]);
                     break;
 
                 default:
