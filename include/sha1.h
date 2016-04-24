@@ -109,7 +109,7 @@ void sha1_init(sha1_info *context);
   *             uint8_t sha1_hash[HASH_SIZE]: array que suporta o resultado o hash sha-1
   * Retorno     : código de erro
   */
-int generate_sha1(sha1_info *context, const uint8_t *original_message, uint32_t length, uint8_t sha1_hash[HASH_SIZE]);
+int generate_sha1(sha1_info *context, char *fname, uint8_t sha1_hash[HASH_SIZE]);
 
  /*
   * Brief       : Cria blocos de mensagem múltiplos de 512-bits
@@ -158,7 +158,8 @@ uint32_t shar1_circular_shift(uint32_t word, uint8_t n);
   *             uint8_t* sha1_hash: hash a ser impresso
   * Retorno     : Nenhum
   */
-void print_hash_to_cmd(uint8_t* sha1_hash);
+void print_sha1_to_cmd(uint8_t* sha1_hash);
 
+void print_sha1_to_file(uint8_t* sha1_hash, char *fname);
 
 #endif

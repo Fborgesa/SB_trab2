@@ -17,7 +17,12 @@
  */
 
 #include <string.h>
-#include "../include/CRC32.h"
+
+#if _WIN32
+    #include "..\include\CRC32.h"
+#else
+    #include "../include/CRC32.h"
+#endif
 
 #define OPT1(ac, av) (ac > 1 ? av[1][0] == '-' ? av[1] : "\0" : "\0")
 
