@@ -73,7 +73,7 @@ int32_t generate_crc32(char *fname_in, char* fname_out) {
     }
 
     if ((fp_out = fopen(fname_out, "wb")) == NULL) {
-        printf("\nErro ao abrir o arquivo de entrada.\n\n");
+        printf("\nErro ao abrir o arquivo de saída.\n\n");
         exit(0);
     }
 
