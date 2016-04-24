@@ -1,4 +1,20 @@
-#include "../include/CRC32.h"
+/*
+ *  Universidade de Brasília
+ *  Instituto de Ciencias Exatas
+ *  Departamento de Ciência da Computação
+ *
+ *  Software Básico - Turma A - 1/2016
+ *
+ *  Hashs e CRCs
+ *
+ *  Grupo 3:
+ *      - Carlos Joel Tavares da Silva  13/0007293
+ *      - Felipe Barreto Fernandes      09/0112831
+ *      - Felipe Borges Albuquerque     09/93972
+ *      - Géssica Neves Sodré da Silva  11/0146115
+ *      - Pedro da Costa Abreu Júnior   11/0018800
+ *
+ */
 
 // Especificações do CRC gerado:
 
@@ -14,6 +30,8 @@
 // Qual implementação utilizar? DIRECT_TABLE_ALGORITHM ou TABLE_ALGORITHM
 // O TABLE ALGORITHM PARECE NAO FUNCIONAR!!!
 #define DIRECT_TABLE_ALGORITHM
+
+#include "../include/CRC32.h"
 
 // Tabela com todos os XOR`s de 0x04c11db7 pré-calculados.
 static const unsigned int crc_table[256] = {
@@ -62,16 +80,20 @@ static const unsigned int crc_table[256] = {
     0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4};
 
 #ifdef DIRECT_TABLE_ALGORITHM
-int32_t generate_crc32(char *fname) {
-    FILE *fp_in;
+int32_t generate_crc32(char *fname_in, char* fname_out) {
+    FILE *fp_in, *fp_out;
     uint8_t topByte = 0, b = 0, index = 0;
     uint32_t reg = 0xffffffff;
 
-    if ((fp_in = fopen(fname, "rb")) == NULL) {
+    if ((fp_in = fopen(fname_in, "rb")) == NULL) {
         printf("\nErro ao abrir o arquivo de entrada.\n\n");
         exit(0);
     }
 
+    if ((fp_out = fopen(fname_out, "wb")) == NULL) {
+        printf("\nErro ao abrir o arquivo de saída.\n\n");
+        exit(0);
+    }
 
     while (b = fgetc(fp_in), feof(fp_in) == 0) {
         // Pega o byte do topo do registrador.
@@ -81,24 +103,31 @@ int32_t generate_crc32(char *fname) {
         index = topByte ^ reflect(b);
         // Executa o XOR com a contribuição dos bytes de entrada e de saída.
         reg = reg << 8 ^ crc_table[index];
-        
+
     }
 
-    return reflect32(reg) ^ 0xffffffff;
+    reg = reflect32(reg) ^ 0xffffffff;
+
+    fprintf(fp_out, "%x", reg);
+
+    fclose(fp_in);
+    fclose(fp_out);
+
+    return reg;
 }
 
 #elif defined TABLE_ALGORITHM
-int32_t generate_crc32(char *fname) {
+int32_t generate_crc32(char *fname_in) {
     FILE *fp_in;
     uint8_t topByte = 0, b = 0;
     uint32_t reg = 0xffffffff;
-    
-    if ((fp_in = fopen(fname, "rb")) == NULL) {
+
+    if ((fp_in = fopen(fname_in, "rb")) == NULL) {
         printf("\nErro ao abrir o arquivo de entrada.\n\n");
         exit(0);
     }
-    
-    
+
+
     while (b = fgetc(fp_in), feof(fp_in) == 0) {
         // Pega o byte do topo do registrador.
         topByte = (reg >> 24 & 0x000000ff);
@@ -106,33 +135,53 @@ int32_t generate_crc32(char *fname) {
         reg = reg << 8 | reflect(b);
         // Executa o XOR com o valor da tabela correspondente ao topo.
         reg ^= crc_table[topByte];
-        
+
     }
-    
+
     for (int i=0; i<4; i++) reg = (reg << 8) ^ crc_table[(reg >> 24) & 0x000000ff];
-    
+
     // Reflete o resto e executa o XORout.
     return reflect32(reg) ^ 0xffffffff;
 }
-
-int check_crc32(char *fname) {
-    return 0;
-}
 #endif
 
+int32_t check_crc32(char *fname_in_file, char *fname_in_crc) {
+    FILE *fp_in_crc = NULL;
+    int32_t crcReceived = 0, crcGenerated = 0;
+
+    if ((fp_in_crc = fopen(fname_in_crc, "rb")) == NULL) {
+        printf("\nErro ao abrir o arquivo de entrada.\n\n");
+        exit(0);
+    }
+
+    fscanf(fp_in_crc, "%x", &crcReceived);
+
+    crcGenerated = generate_crc32(fname_in_file, "crc_check.txt");
+
+    printf("\nCRC recebido: %x\n", crcReceived);
+    printf("\nCRC gerado: %x\n", crcGenerated);
+
+    if (crcReceived == crcGenerated) {
+        printf("\nArquivo integro.\n\n");
+        return 1;
+    }
+
+    printf("\nArquivo corrompido.\n\n");
+    return 0;
+}
+
 uint8_t reflect(uint8_t b) {
-    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
     b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
     return b;
 }
 
-unsigned reflect32(unsigned x) {
-    x = ((x & 0x55555555) <<  1) | ((x >>  1) & 0x55555555);
-    x = ((x & 0x33333333) <<  2) | ((x >>  2) & 0x33333333);
-    x = ((x & 0x0F0F0F0F) <<  4) | ((x >>  4) & 0x0F0F0F0F);
-    x = (x << 24) | ((x & 0xFF00) << 8) |
-    ((x >> 8) & 0xFF00) | (x >> 24);
+uint32_t reflect32(uint32_t x) {
+    x = ((x & 0xAAAAAAAA) >> 1) | ((x & 0x55555555) << 1);
+    x = ((x & 0xCCCCCCCC) >> 2) | ((x & 0x33333333) << 2);
+    x = ((x & 0xF0F0F0F0) >> 4) | ((x & 0x0F0F0F0F) << 4);
+    x = ((x & 0xFF00FF00) >> 8) | ((x & 0x00FF00FF) << 8);
+    x = ((x & 0xFFFF0000) >> 16) | ((x & 0x0000FFFF) << 16);
     return x;
 }
-

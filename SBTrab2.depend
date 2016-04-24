@@ -44,3 +44,17 @@
 1461186932 source:d:\mygit\sb_trab2\src\md5.c
 	"..\include\md5.h"
 
+1461367297 source:c:\users\zesinho\gitstuf\src\mainmd5.c
+	"..\include\md5.h"
+	"../include/md5.h"
+
+1461366237 c:\users\zesinho\gitstuf\include\md5.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdint.h>
+
+1461366237 source:c:\users\zesinho\gitstuf\src\md5.c
+	"..\include\md5.h"
+	"../include/md5.h"
+

@@ -12,7 +12,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="oimeunomeehpedro" />
+				<Option parameters="-a ./bench/amostra_h12.bmp" />
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-std=c99" />
@@ -33,16 +33,27 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c99" />
 		</Compiler>
 		<Unit filename="include/CRC32.h" />
 		<Unit filename="include/md5.h" />
+		<Unit filename="include/sha1.h" />
 		<Unit filename="src/CRC32.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/mainHash.c">
+		<Unit filename="src/mainCRC.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/mainMd5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/mainSha1.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/md5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/sha1.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

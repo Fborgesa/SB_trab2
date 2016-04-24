@@ -23,7 +23,7 @@
 
 int main(int argc, char **argv){
     char *ar = argv[2], *msg;
-    int i; 
+    int i;
     int filelen;
     uint8_t result[16];
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv){
         filelen = strlen(ar);
         md5((uint8_t*) ar, filelen, result);
     }else if(strcmp(argv[1], "-s")){
-        FILE *arq = fopen(ar, "rb"); 
+        FILE *arq = fopen(ar, "rb");
         if(arq == NULL){
             printf("Erro ao abrir o arquivo\n");
             return 1;
@@ -43,15 +43,15 @@ int main(int argc, char **argv){
         fseek(arq, 0, SEEK_END);
         filelen = ftell(arq);
         rewind(arq);
-        msg = (char*)(malloc(filelen + 1));
-        fgets(msg, filelen, arq);
-        printf("%s###%d\n", msg, filelen - 1);
-        md5((uint8_t*) msg, filelen - 1, result);
+        msg = (char*)(malloc(filelen));
+        fread(msg, 1, filelen, arq);
+        //printf("%s\n", ar, filelen);
+        md5((uint8_t*) msg, filelen, result);
     }
     // display result
     for (i = 0; i < 16; i++)
         printf("%2.2x", result[i]);
-
+    printf(" - %s", ar);
     printf("\n");
     return 0;
 

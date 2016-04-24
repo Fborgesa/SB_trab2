@@ -5,9 +5,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-
-#endif /* CRC32_h */
-
 // Brief: Gera um valor CRC32.
 //
 // Descrição: Gera um valor CRC32, através de uma busca em uma tabela pré-calculada
@@ -17,9 +14,20 @@
 // char *fname: nome do arquivo que terá seu CRC calculado.
 //
 // Retorno: Valor CRC.
-int32_t generate_crc32(char *fname);
+int32_t generate_crc32(char *fname_in, char* fname_out);
 
-int check_crc32(char *fname);
+// Brief: Checa a integridade de um arquivo a partir do seu CRC.
+//
+// Descrição: Recebe um arquivo que será checado e outro arquivo com o seu CRC,
+// gera um novo CRC e compara os dois.
+//
+// Parâmetros:
+// char *fname_in_file: nome do arquivo a ser checado.
+// char *fname_in_crc: nome do arquivo com o CRC pré-calculado.
+//
+// Retorno: Retorna 1 se o arquivo estiver integro e 0 se o arquivo estiver
+// corrompido.
+int32_t check_crc32(char *fname_in_file, char *fname_in_crc);
 
 // Brief: Reflete um byte.
 //
@@ -40,3 +48,5 @@ uint8_t reflect(uint8_t b);
 //
 // Retorno: Palavra refletida.
 uint32_t reflect32(uint32_t x);
+
+#endif /* CRC32_h */

@@ -15,164 +15,160 @@
  *      - Pedro da Costa Abreu Júnior   11/0018800
  *
  */
+
+#include <string.h>
 #include "../include/CRC32.h"
 
-#define OPT1(ac, av) (ac > 1 ? av[1][0] == '-' ? av[1][1] : '\0' : '\0')
+#define OPT1(ac, av) (ac > 1 ? av[1][0] == '-' ? av[1] : "\0" : "\0")
 
 #define OPT2(ac, av) (ac > 2 ? av[2][0] == '-' ? av[2][1] : '\0' : '\0')
 
 
 // Mensagens de erro.
 char *error[] = { "\nSintaxe errada. \n\
-    Utilize a opcao -h para obter ajuda ou rode o programa sem passar parametros.\n\n",
-    "\nBase nao implementada. Utilize a opcao -h para obter ajuda.\n\n"};
+Utilize a opcao -h para obter ajuda ou rode o programa sem passar parametros.\n\n",
+"\nOpção não implementada. Utilize a opcao -h para obter ajuda.\n\n"};
 
-char *help = "\nSintaxe:\n \
-main { -e | -d | -h} { -b62 | -b64 | -b85 | -b91 } {arquivo de entrada} {arquivo de saida}\n\
+char *help = "\nSintaxe:\n\
+crc -h Exibe o menu de ajuda.\n\
 \n\
--e O arquivo sera codificado (binario para texto).\n\
--d O arquivo sera decodificado (texto para binario).\n\
--h Menu de ajuda.\n\
+crc { -16 | -32 } { -g | -c } {nome_arquivo1} {nome_arquivo2}\n\
 \n\
--b62 A base utilizada sera a base 62.\n\
--b64 A base utilizada sera a base 64.\n\
--b85 A base utilizada sera a base 85.\n\
--b91 A base utilizada sera a base 91.\n\
+-16 O CRC gerado será o CRC16.\n\
+-32 O CRC gerado será o CRC32.\n\
+\n\
+-g Gera o CRC de um arquivo de entrada (nome_arquivo1) e salva o CRC gerado\n\
+   em um arquivo de saída (nome_arquivo2), além de imprimir o CRC gerado em\n\
+   tela.\n\
+-c Checa se o arquivo de entrada (nome_arquivo1) está integro, utilizando o\n\
+   CRC disponibilizado em outro arquivo (nome_arquivo2).\n\
+   O programa imprime em tela se o arquivo está integro ou se foi corrompido\n\
+   e gera um arquivo de saída \"crc_check.txt\" com o CRC gerado sobre o\n\
+   arquivo de entrada (nome_arquivo1).\n\
 \n";
 
-//void conversor(char opt1, char opt2, char *a_entrada, char *a_saida){
-int main(int argc, char **argv) {
+void param_cmd_line(int argc, char **argv) {
+    char *aux = NULL;
     int opt1 = 0, opt2 = 0, crc32 = 0;
-    
-    opt1 = OPT1(argc, argv);
+
+    aux = OPT1(argc, argv);
+    if (strcmp(aux, "-h") == 0)
+        opt1 = 'h';
+    else if (strcmp(aux, "-32") == 0)
+        opt1 = '3';
+    else if (strcmp(aux, "-16") == 0)
+        opt1 = '1';
+
     opt2 = OPT2(argc, argv);
-    
+
     switch (opt1) {
         // Ajuda.
         case 'h':
             printf("%s", help);
             break;
-            
+
         // CRC32.
         case '3':
             switch (opt2) {
                 // Gerar.
                 case 'g':
-                    crc32 = generate_crc32(argv[3]);
+                    crc32 = generate_crc32(argv[3], argv[4]);
                     printf("\n%x\n\n", crc32);
                     break;
-                    
+
                 // Checar.
                 case 'c':
+                    check_crc32(argv[3], argv[4]);
                     break;
-                    
                 default:
                     printf("%s", error[1]);
                     break;
             }
             break;
-            
+
         // CRC16.
         case '1':
             switch (opt2) {
                 // Gerar.
                 case '3':
                     break;
-                    
+
                 // Checar.
                 case '1':
                     break;
-                    
+
                 default:
                     printf("%s", error[1]);
                     break;
             }
             break;
-            
+
         default:
             printf("%s", error[0]);
             break;
     }
 }
 
-//int main(int argc, char **argv) {
-//    char op = '\0', base = '\0';
-//    char arq_entrada[200], arq_saida[200], buf[20];
-//
-//    //Se o programa for inicializado sem parametros, eles serao
-//    //pedidos ao usuario.
-//    //Os parametros serao solicitados novamente, ate que sejam
-//    //passados corretamente.
-//    if (argc == 1) {
-//        printf("\nBem Vindo ao programa de conversoes do Grupo 3!\n");
-//        printf("E antes que voce pergunte, nao, nao somos Universal\n");
-//
-//        /* Pede a base a ser utilizada para realizar a operação*/
-//        do {
-//            printf("\nInforme a base que deseja utilizar.\n");
-//            printf("Opcoes disponiveis:\n");
-//            printf("b62 , b64 , b85 , b91 ou 0 para sair.\n");
-//            scanf("%s", buf);
-//            getchar();
-//            if (!strcmp(buf, "b62"))
-//                base = '2';
-//            else if (!strcmp(buf, "b64"))
-//                base = '4';
-//            else if (!strcmp(buf, "b85"))
-//                base = '5';
-//            else if (!strcmp(buf, "b91"))
-//                base = '1';
-//            else if (!strcmp(buf, "0"))
-//                exit(0);
-//        } while(!existe_opcao(base));
-//
-//
-//        /* Pede pela operação que deseja realizar*/
-//        do {
-//            printf("\nInforme a operacao que deseja realizar.\n");
-//            printf("0 - Sair. \n1 - Encoding. \n2 - Decoding.\n");
-//            scanf("%c", &op);
-//            getchar();
-//            if (op == '0')
-//                exit(0);
-//        } while(op != '1' &&  op!= '2');
-//
-//        /* Pede pelo arquivo de entrada a ser codificado ou decodificado*/
-//        printf("\nInforme o nome do arquivo de entrada: ");
-//        scanf("%s", arq_entrada);
-//        while (!existe_arquivo(arq_entrada)) {
-//            printf("\nArquivo informado nao existe! Tente novamente ");
-//            printf("\nInforme o nome do arquivo que de entrada: ");
-//            scanf("%s", arq_entrada);
-//        }
-//
-//        // Pede o nome do arquivo de saida.
-//        printf("\nInforme o nome do arquivo de saida: ");
-//        scanf("%s", arq_saida);
-//    }
-//
-//    /* Caso do -h */
-//    else if (argc == 2) {
-//        op = OPT1(argc, argv);
-//    }
-//
-//    /* Se os valores forem passados as variáveis serão inicializadas */
-//    else if (argc == 5) {
-//        op = OPT1(argc, argv);
-//        if (!strcmp(argv[2], "-b62"))
-//            base = '2';
-//        else if (!strcmp(argv[2], "-b64"))
-//            base = '4';
-//        else if (!strcmp(argv[2], "-b85"))
-//            base = '5';
-//        else if (!strcmp(argv[2], "-b91"))
-//            base = '1';
-//        else
-//            base = '0';
-//        strcpy(arq_entrada, argv[3]);
-//        strcpy(arq_saida, argv[4]);
-//    }
-//
-//    conversor(op, tipo, arq_entrada, arq_saida);
-//    return 0;
-//}
+void ask_param() {
+    char op1 = '\0', op2 = '\0', name_arq1[100] = {0}, name_arq2[100] = {0};
+    int crc32 = 0;
+
+    do {
+        printf("Digite o CRC a ser usado.\n");
+        printf("0 - Sair.\n");
+        printf("1 - CRC16.\n");
+        printf("2 - CRC32.\n");
+        op1 = getchar();
+        if (op1 == '0')
+            exit(0);
+    } while (op1 != '1' && op1 != '2');
+
+    do {
+        printf("Digite se deseja gerar o CRC ou checar a integridade de um arquivo.\n");
+        printf("0 - Sair.\n");
+        printf("1 - Gerar CRC.\n");
+        printf("2 - Checar a integridade de um arquivo.\n");
+        op2 = getchar();
+        if (op2 == '0')
+            exit(0);
+    } while (op2 != '1' && op2 != '2');
+
+    if (op2 == '1')
+        printf("Digite o nome do arquivo que terá seu CRC calculado:\n");
+    else if (op2 == '2')
+        printf("Digite o nome do arquivo que terá sua integridade checada:\n");
+    scanf("%s", name_arq1);
+
+    if (op2 == '1') {
+        printf("Digite o nome do arquivo de saída, onde o valor do CRC gerado\n");
+        printf("será salvo:\n");
+    }
+    if (op2 == '2') {
+        printf("Digite o nome do arquivo que possui o valor do CRC correspondente\n");
+        printf("ao arquivo de entrada.\n");
+    }
+    scanf("%s", name_arq2);
+
+    // Gerar CRC16.
+    if (op1 == '1' && op2 == '1') {}
+
+    // Checar integridade de um arquivo com CRC16.
+    else if (op1 == '1' && op2 == '2') {}
+
+    // Gerar CRC32.
+    else if (op1 == '2' && op2 == '1') {
+        crc32 = generate_crc32(name_arq1, name_arq2);
+        printf("\n%x\n\n", crc32);
+    }
+
+    // Checar integridade de um arquivo com CRC32.
+    else if (op1 == '2' && op2 == '2')
+        check_crc32(name_arq1, name_arq2);
+}
+
+int main(int argc, char **argv) {
+    if (argc == 1)
+        ask_param();
+    else
+        param_cmd_line(argc, argv);
+}
