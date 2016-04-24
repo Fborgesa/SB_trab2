@@ -38,6 +38,7 @@
 
 # Codigo compilado
 crc
+hash
 
 # Mac
 .DS_Store

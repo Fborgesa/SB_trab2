@@ -20,8 +20,10 @@
 
 #if _WIN32
     #include "..\include\CRC32.h"
+    #include "..\include\CRC16.h"
 #else
     #include "../include/CRC32.h"
+    #include "../include/CRC16.h"
 #endif
 
 #define OPT1(ac, av) (ac > 1 ? av[1][0] == '-' ? av[1] : "\0" : "\0")
@@ -54,7 +56,7 @@ crc { -16 | -32 } { -g | -c } {nome_arquivo1} {nome_arquivo2}\n\
 
 void param_cmd_line(int argc, char **argv) {
     char *aux = NULL;
-    int opt1 = 0, opt2 = 0, crc32 = 0;
+    int opt1 = 0, opt2 = 0, crc32 = 0, crc16 = 0;
 
     aux = OPT1(argc, argv);
     if (strcmp(aux, "-h") == 0)
@@ -95,11 +97,14 @@ void param_cmd_line(int argc, char **argv) {
         case '1':
             switch (opt2) {
                 // Gerar.
-                case '3':
+                case 'g':
+                    crc16 = generateCRC16(argv[3], argv[4]);
+                    printf("\n%x\n\n", crc16);
                     break;
 
                 // Checar.
-                case '1':
+                case 'c':
+                    checkCRC16(argv[3], argv[4]);
                     break;
 
                 default:
@@ -116,7 +121,7 @@ void param_cmd_line(int argc, char **argv) {
 
 void ask_param() {
     char op1 = '\0', op2 = '\0', name_arq1[100] = {0}, name_arq2[100] = {0};
-    int crc32 = 0;
+    int crc32 = 0, crc16 = 0;
 
     do {
         printf("Digite o CRC a ser usado.\n");
@@ -155,10 +160,14 @@ void ask_param() {
     scanf("%s", name_arq2);
 
     // Gerar CRC16.
-    if (op1 == '1' && op2 == '1') {}
+    if (op1 == '1' && op2 == '1') {
+        crc16 = generateCRC16(name_arq1, name_arq2);
+        printf("\n%x\n\n", crc16);
+    }
 
     // Checar integridade de um arquivo com CRC16.
-    else if (op1 == '1' && op2 == '2') {}
+    else if (op1 == '1' && op2 == '2')
+        checkCRC16(name_arq1, name_arq2);
 
     // Gerar CRC32.
     else if (op1 == '2' && op2 == '1') {
