@@ -23,7 +23,7 @@
     #include "../include/md5.h"
 #endif
 
-// Constants are the integer part of the sines of integers (in radians) * 2^32.
+// Parte inteira de função de seno para inteireiros em radianos * 2^32
 const uint32_t k[64] = {
         0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
         0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
@@ -43,13 +43,12 @@ const uint32_t k[64] = {
         0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
 };
 
-// r specifies the per-round shift amounts
+// r especifica a quantidade de shift por round
 const uint32_t r[] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
                       5,  9, 14, 20, 5,  9, 14, 20, 5,  9, 14, 20, 5,  9, 14, 20,
                       4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
                       6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-// leftrotate function definition
 #define LEFTROTATE(x, c) (((x) << (c)) | ((x) >> (32 - (c))))
 
 void to_bytes(uint32_t val, uint8_t *bytes)
@@ -73,9 +72,6 @@ uint32_t to_int32(const uint8_t *bytes)
 #define H(X,Y,Z) ((X) ^ (Y) ^ (Z))
 #define I(X,Y,Z) ((Y) ^ ((X) | ~(Z)))
 
-// o vetor de saída deve ter tamanho 2
-// In this document a "word" is a 32-bit quantity and a "byte" is an
-// eight-bit quantity.
 void toword_array(const size_t val, uint32_t *saida){
         saida[0] = (uint32_t) val;
         saida[1] = (uint32_t) (val >> 32);
@@ -92,10 +88,9 @@ void md5(const uint8_t *msg_inicial, long long inicial_len, uint8_t *md5_msg)
         uint32_t a, b, c, d, f, g, temp;
         uint8_t *msg = NULL;
 
-        //msglen is len (in bits) at the beginning, and at the end will be congruent to 448 mod 512
         for(msglen = (inicial_len + 1) * 8; msglen % 512 < 448; msglen++) ;
 
-        msglen = msglen / 8; //msglen in bytes plus the 64 bits of len to be appended
+        msglen = msglen / 8; 
         msg = (uint8_t*)malloc(msglen + 8);
         memcpy(msg, msg_inicial, inicial_len);
         msg[inicial_len] = 0x80;
@@ -117,17 +112,14 @@ void md5(const uint8_t *msg_inicial, long long inicial_len, uint8_t *md5_msg)
         // processar a mensagem em chunks de 64 bytes (512 bits)
         for(offset=0; offset<msglen; offset += 64) {
 
-                // break chunk into sixteen 32-bit words w[j], 0 ≤ j ≤ 15
                 for (i = 0; i < 16; i++)
                         w[i] = to_int32(msg + offset + i*4);
 
-                // Initialize hash value for this chunk:
                 a = aa;
                 b = bb;
                 c = cc;
                 d = dd;
 
-                // Main loop:
                 for(i = 0; i<64; i++) {
 
                         if (i < 16) {
@@ -152,7 +144,6 @@ void md5(const uint8_t *msg_inicial, long long inicial_len, uint8_t *md5_msg)
 
                 }
 
-                // Add this chunk's hash to result so far:
                 aa += a;
                 bb += b;
                 cc += c;
