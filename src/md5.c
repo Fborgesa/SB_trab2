@@ -186,7 +186,7 @@ void print_md5_to_cmd(uint8_t result[16]) {
 
         printf("\t");
         for (i = 0; i < 16; i++)
-                printf("%x", result[i]);
+                printf("%02x ", result[i]);
         printf("\n");
 
         return;
@@ -202,7 +202,7 @@ void print_md5_to_file(uint8_t result[16], char *fname) {
         }
 
         for (i=0; i<16; i++) {
-                fprintf(fp_out, "%x", result[i]);
+                fprintf(fp_out, "%02x ", result[i]);
         }
 
         fclose(fp_out);
