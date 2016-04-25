@@ -90,7 +90,7 @@ void md5(const uint8_t *msg_inicial, long long inicial_len, uint8_t *md5_msg)
 
         for(msglen = (inicial_len + 1) * 8; msglen % 512 < 448; msglen++) ;
 
-        msglen = msglen / 8; 
+        msglen = msglen / 8;
         msg = (uint8_t*)malloc(msglen + 8);
         memcpy(msg, msg_inicial, inicial_len);
         msg[inicial_len] = 0x80;
@@ -186,7 +186,7 @@ void print_md5_to_cmd(uint8_t result[16]) {
 
         printf("\t");
         for (i = 0; i < 16; i++)
-                printf("%x ", result[i]);
+                printf("%x", result[i]);
         printf("\n");
 
         return;
@@ -202,7 +202,7 @@ void print_md5_to_file(uint8_t result[16], char *fname) {
         }
 
         for (i=0; i<16; i++) {
-                fprintf(fp_out, "%x ", result[i]);
+                fprintf(fp_out, "%x", result[i]);
         }
 
         fclose(fp_out);
